@@ -3,9 +3,10 @@
 
 import sys
 from PyQt5 import QtGui
-from PyQt5.QtWidgets import (QApplication, QWidget, QDesktopWidget,  
-                             QPushButton, QToolTip, QMessageBox)
-from PyQt5.QtGui import QIcon, QFont
+from PyQt5.QtWidgets import (QApplication, QWidget, QDesktopWidget, 
+    QGridLayout, QVBoxLayout, QPushButton, QInputDialog, QLabel, QHBoxLayout,
+    QToolTip, QMessageBox, QLineEdit, QTextEdit,QFrame, QLCDNumber, QSlider,)
+from PyQt5.QtGui import QIcon, QFont, QColor
 
 class Example(QWidget):
 
@@ -15,6 +16,7 @@ class Example(QWidget):
         self.initUI()
 
     def initUI(self):
+        layout = QHBoxLayout(self)
         '''
             кнопка с подсказкой 
         '''
@@ -34,12 +36,26 @@ class Example(QWidget):
         #qbtn.resize(qbtn.sizeHint())
         #qbtn.move(50, 50)
     
-        self.setGeometry(300, 300, 500, 400)
+        self.resize(800, 440)
+        self.center()
         self.setWindowTitle('merge sort')
-        self.setWindowIcon(QIcon('web.png'))
+        self.setWindowIcon(QIcon('web.png'))    
+
+        self.btn = QPushButton('Enter array', self)
+        self.btn.clicked.connect(self.gettext)
+        layout.addWidget(self.btn)
+
+        # Array input field
+        self.lbl = QLabel('<b>Enter array:</b>', self)
+        layout.addWidget(self.lbl)
+
+        # output element
+        self.le = QLabel(self)
+        layout.addWidget(self.le)  
 
         self.show()
 
+    # Питає чи ви точно впевнені, що хочете закрити
     def closeEvent(self, event):
          
         reply = QMessageBox.question(self, 'Message',
@@ -49,7 +65,23 @@ class Example(QWidget):
         if reply == QMessageBox.Yes:
             event.accept()
         else:
-            event.ignore()         
+            event.ignore()   
+
+    # Робить щоб вікно було по центру
+    def center(self):
+        qr = self.frameGeometry()
+        cp = QDesktopWidget().availableGeometry().center()
+        qr.moveCenter( cp )
+        self.move(qr.topLeft()) 
+
+    # введення массиву
+    def gettext(self):
+
+        text, ok = QInputDialog.getText(self, 'Input Dialog',
+            'Enter element:')      
+        if ok:
+            self.le.setText(str(text))
+
 
 
 if __name__ == '__main__':
