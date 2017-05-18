@@ -41,7 +41,7 @@ class Example(QWidget):
         self.output.setPlaceholderText("[1,2,3,4,5,6..]") 
         layout.addWidget(self.output)  
 
-        #self.MargerSort(arr)
+        self.mergeSort( self.arr )
 
         self.show()
 
@@ -64,6 +64,41 @@ class Example(QWidget):
         qr.moveCenter( cp )
         self.move(qr.topLeft()) 
 
+    # function marge sort
+
+    def mergeSort(self, alist):
+        if len(alist)>1:
+            mid = len(alist)//2
+            lefthalf = alist[:mid]
+            righthalf = alist[mid:]
+
+            mergeSort(lefthalf)
+            mergeSort(righthalf)
+
+            i=0
+            j=0
+            k=0
+            while i<len(lefthalf) and j<len(righthalf):
+                if lefthalf[i]<righthalf[j]:
+                    alist[k]=lefthalf[i]
+                    i=i+1
+                else:
+                    alist[k]=righthalf[j]
+                    j=j+1
+                k=k+1
+
+            while i<len(lefthalf):
+                aist[k]=lefthalf[i]
+                i=i+1
+                k=k+1
+
+            while j<len(righthalf):
+                alist[k]=righthalf[j]
+                j=j+1
+                k=k+1
+            self.output.setText(str("\n" + self.alist))     
+            
+
     # Enter array
     def getnum(self):
         num, ok = QInputDialog.getInt(self, 'integer input dualog',
@@ -71,7 +106,9 @@ class Example(QWidget):
         if ok:
             self.arr.append(num)
             self.output.setText(str(self.arr))
+            self.mergeSort(self.arr)
 
+    # Enter number in array
     def randArray(self, length):
         i = 0
         length, ok = QInputDialog.getInt(self, 'integer input dualog',
@@ -81,34 +118,6 @@ class Example(QWidget):
                 self.arr.append(random.randint(0, 99))
                 i+=1
             self.output.setText(str(self.arr))
-
-    def MergerSort(arr):       
-        def MergerGroup(arr, left, m, right):
-            if left >= right: return None
-            if m < left or right < m: return None
-            t = left
-            for j in xrange(m+1, right+1):#подгруппа 2
-                for i in xrange(t, j):#цикл подгруппы 1
-                    if arr[j] < arr[i]:
-                        r = arr[j]
-                        #итерационно переставляем элементы, чтобы упорядочить
-                        for k in xrange(j, i, -1):
-                            arr[k] = arr[k - 1]
-                        arr[i] = r
-                        t = i#проджолжение вставки в группе 1
-                        break#к следующему узлу из подгруппы 2                   
-        if len(num) < 2: return None
-        k=1
-        while k<len(num):
-            g=0
-            while g<len(num):#группы
-                z = g + k + k - 1#последний эл-т группы
-                r = z if z < len(num) else len(num) - 1#последняя группа
-                MergerGroup(num, g, g + k - 1, r)#слияние
-                g+=2*k
-            k*=2
-
-
 
 
 if __name__ == '__main__':
