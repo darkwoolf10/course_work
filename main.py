@@ -4,7 +4,7 @@ import sys, random
 from PyQt5 import QtGui
 from PyQt5.QtWidgets import (QApplication, QWidget, QDesktopWidget, 
     QGridLayout, QVBoxLayout, QPushButton, QInputDialog, QLabel, QHBoxLayout,
-    QToolTip, QMessageBox, QLineEdit, QTextEdit,QFrame, QLCDNumber, QSlider,)
+    QToolTip, QMessageBox, QLineEdit, QTextEdit,QFrame, QLCDNumber, QSlider)
 from PyQt5.QtGui import QIcon, QFont, QColor
 
 class Example(QWidget):
@@ -28,6 +28,14 @@ class Example(QWidget):
         self.btn.clicked.connect(self.getnum)
         layout.addWidget(self.btn)
 
+        self.sort = QPushButton('sort array', self)
+        self.sort.clicked.connect(self.sortArray)
+        layout.addWidget(self.sort)
+
+        self.clear = QPushButton('Clear', self)
+        self.clear.clicked.connect(self.clearWindow)
+        layout.addWidget(self.clear)
+
         # rand button
         self.randButton = QPushButton('rand', self)
         self.randButton.clicked.connect(self.randArray)
@@ -38,7 +46,7 @@ class Example(QWidget):
         layout.addWidget(self.lbl)
 
         self.output = QTextEdit(self)
-        self.output.setPlaceholderText("[1,2,3,4,5,6..]") 
+        
         layout.addWidget(self.output)  
 
         self.mergeSort( self.arr )
@@ -72,8 +80,8 @@ class Example(QWidget):
             lefthalf = alist[:mid]
             righthalf = alist[mid:]
 
-            mergeSort(lefthalf)
-            mergeSort(righthalf)
+            self.mergeSort(lefthalf)
+            self.mergeSort(righthalf)
 
             i=0
             j=0
@@ -88,7 +96,7 @@ class Example(QWidget):
                 k=k+1
 
             while i<len(lefthalf):
-                aist[k]=lefthalf[i]
+                alist[k]=lefthalf[i]
                 i=i+1
                 k=k+1
 
@@ -96,8 +104,7 @@ class Example(QWidget):
                 alist[k]=righthalf[j]
                 j=j+1
                 k=k+1
-            self.output.setText(str("\n" + self.alist))     
-            
+                
 
     # Enter array
     def getnum(self):
@@ -106,8 +113,6 @@ class Example(QWidget):
         if ok:
             self.arr.append(num)
             self.output.setText(str(self.arr))
-            self.mergeSort(self.arr)
-
     # Enter number in array
     def randArray(self, length):
         i = 0
@@ -117,10 +122,23 @@ class Example(QWidget):
             while( i < length):
                 self.arr.append(random.randint(0, 99))
                 i+=1
-            self.output.setText(str(self.arr))
+            if length > 1:
 
+                self.output.setText("<b>Your array: </b>" + str(self.arr))
+                self.mergeSort( self.arr )
+                self.output.append("\n<b>Result: </b>" + str(self.arr))
+            else:
+                self.output.append("<b>Your array: </b>" + str(self.arr))
+
+    def sortArray(self):
+        self.mergeSort(self.arr)
+        self.output.append("\n<b>Result: </b>" + str(self.arr))
+
+    def clearWindow(self):
+        self.output.clear() 
+        self.arr = []
 
 if __name__ == '__main__':
-    app = QApplication(sys.argv)
+    app = QApplication(sys.argv)    
     ex = Example()
     sys.exit(app.exec_())
