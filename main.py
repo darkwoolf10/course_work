@@ -16,30 +16,67 @@ class Example(QWidget):
 
     def initUI(self):
         layout = QHBoxLayout(self)
-
+        button = QHBoxLayout(self)
         self.arr = []
     
         self.resize(800, 440)
         self.center()
-        self.setWindowTitle('merge sort')
+        self.setWindowTitle('Merge sort')
         self.setWindowIcon(QIcon('web.png'))    
+
+        # rand button
+        self.randButton = QPushButton('Rand', self)
+        self.randButton.clicked.connect(self.randArray)
+        button.addWidget(self.randButton)
+        self.randButton.move(0, 0)
+        self.randButton.setStyleSheet("""
+            color: #fff; /* цвет текста */
+            text-decoration: none; /* убирать подчёркивание у ссылок */
+            background: rgb(212,75,56); /* фон кнопки */
+            } 
+            QPushButton:hover { background: rgb(232,95,76); } /* при наведении курсора мышки */
+            QPushButton:active { background: rgb(152,15,0); } /* при нажатии */)
+            """)
+
+        self.sort = QPushButton('Sort array', self)
+        self.sort.clicked.connect(self.sortArray)
+        button.addWidget(self.sort)
+        self.sort.move(11, 60)
+        self.sort.setStyleSheet("""
+            color: #fff; /* цвет текста */
+            text-decoration: none; /* убирать подчёркивание у ссылок */
+            background: rgb(212,75,56); /* фон кнопки */
+            } 
+            QPushButton:hover { background: rgb(232,95,76); } /* при наведении курсора мышки */
+            QPushButton:active { background: rgb(152,15,0); } /* при нажатии */)
+            """)
+
+        self.clear = QPushButton('Clear', self)
+        self.clear.clicked.connect(self.clearWindow)
+        button.addWidget(self.clear)
+        self.clear.move(11, 100)
+        self.clear.setStyleSheet("""
+            color: #fff; /* цвет текста */
+            text-decoration: none; /* убирать подчёркивание у ссылок */
+            background: rgb(212,75,56); /* фон кнопки */
+            } 
+            QPushButton:hover { background: rgb(232,95,76); } /* при наведении курсора мышки */
+            QPushButton:active { background: rgb(152,15,0); } /* при нажатии */)
+            """)
 
         self.btn = QPushButton('Enter array', self)
         self.btn.clicked.connect(self.getnum)
         layout.addWidget(self.btn)
-
-        self.sort = QPushButton('sort array', self)
-        self.sort.clicked.connect(self.sortArray)
-        layout.addWidget(self.sort)
-
-        self.clear = QPushButton('Clear', self)
-        self.clear.clicked.connect(self.clearWindow)
-        layout.addWidget(self.clear)
-
-        # rand button
-        self.randButton = QPushButton('rand', self)
-        self.randButton.clicked.connect(self.randArray)
-        layout.addWidget(self.randButton)
+        self.btn.setStyleSheet("""
+            color: #fff; /* цвет текста */
+            text-decoration: none; /* убирать подчёркивание у ссылок */
+            background: rgb(212,75,56); /* фон кнопки */
+            padding: .7em 1.5em; /* отступ от текста */
+            } 
+            QPushButton:hover { background: rgb(232,95,76); } /* при наведении курсора мышки */
+            QPushButton:active { background: rgb(152,15,0); } /* при нажатии */)
+            """)
+        self.randButton.move(11, 140)
 
         # Array input field
         self.lbl = QLabel('<b>Enter array:</b>', self)
@@ -137,6 +174,7 @@ class Example(QWidget):
     def clearWindow(self):
         self.output.clear() 
         self.arr = []
+   
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)    
