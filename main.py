@@ -30,12 +30,12 @@ class Example(QWidget):
         button.addWidget(self.randButton)
         self.randButton.move(0, 0)
         self.randButton.setStyleSheet("""
-            color: #fff; /* цвет текста */
-            text-decoration: none; /* убирать подчёркивание у ссылок */
-            background: rgb(212,75,56); /* фон кнопки */
+            color: #fff;
+            text-decoration: none;
+            background: rgb(212,75,56);
             } 
-            QPushButton:hover { background: rgb(232,95,76); } /* при наведении курсора мышки */
-            QPushButton:active { background: rgb(152,15,0); } /* при нажатии */)
+            QPushButton:hover { background: rgb(232,95,76); }
+            QPushButton:active { background: rgb(152,15,0); }
             """)
 
         self.sort = QPushButton('Sort array', self)
@@ -43,12 +43,12 @@ class Example(QWidget):
         button.addWidget(self.sort)
         self.sort.move(11, 60)
         self.sort.setStyleSheet("""
-            color: #fff; /* цвет текста */
-            text-decoration: none; /* убирать подчёркивание у ссылок */
-            background: rgb(212,75,56); /* фон кнопки */
+            color: #fff;
+            text-decoration: none;
+            background: rgb(212,75,56);
             } 
-            QPushButton:hover { background: rgb(232,95,76); } /* при наведении курсора мышки */
-            QPushButton:active { background: rgb(152,15,0); } /* при нажатии */)
+            QPushButton:hover { background: rgb(232,95,76); }
+            QPushButton:active { background: rgb(152,15,0); }
             """)
 
         self.clear = QPushButton('Clear', self)
@@ -56,25 +56,25 @@ class Example(QWidget):
         button.addWidget(self.clear)
         self.clear.move(11, 100)
         self.clear.setStyleSheet("""
-            color: #fff; /* цвет текста */
-            text-decoration: none; /* убирать подчёркивание у ссылок */
-            background: rgb(212,75,56); /* фон кнопки */
+            color: #fff;
+            text-decoration: none;
+            background: rgb(212,75,56);
             } 
-            QPushButton:hover { background: rgb(232,95,76); } /* при наведении курсора мышки */
-            QPushButton:active { background: rgb(152,15,0); } /* при нажатии */)
+            QPushButton:hover { background: rgb(232,95,76); }
+            QPushButton:active { background: rgb(152,15,0); }
             """)
 
         self.btn = QPushButton('Enter array', self)
         self.btn.clicked.connect(self.getnum)
         layout.addWidget(self.btn)
         self.btn.setStyleSheet("""
-            color: #fff; /* цвет текста */
-            text-decoration: none; /* убирать подчёркивание у ссылок */
-            background: rgb(212,75,56); /* фон кнопки */
-            padding: .7em 1.5em; /* отступ от текста */
+            color: #fff;
+            text-decoration: none;
+            background: rgb(212,75,56);
+            padding: .7em 1.5em;
             } 
-            QPushButton:hover { background: rgb(232,95,76); } /* при наведении курсора мышки */
-            QPushButton:active { background: rgb(152,15,0); } /* при нажатии */)
+            QPushButton:hover { background: rgb(232,95,76); }
+            QPushButton:active { background: rgb(152,15,0); }
             """)
         self.randButton.move(11, 140)
 
@@ -82,10 +82,11 @@ class Example(QWidget):
         self.lbl = QLabel('<b>Enter array:</b>', self)
         layout.addWidget(self.lbl)
 
+        # output sorting
         self.output = QTextEdit(self)
-        
         layout.addWidget(self.output)  
-
+        
+        self.output.setStyleSheet("color:blue")
         self.mergeSort( self.arr )
 
         self.show()
@@ -110,9 +111,9 @@ class Example(QWidget):
         self.move(qr.topLeft()) 
 
     # function marge sort
-
-    def mergeSort(self, alist):
+    def mergeSort(self, alist):        
         if len(alist)>1:
+            self.output.append("<font color=red>Splitting: </font>" + str(alist))
             mid = len(alist)//2
             lefthalf = alist[:mid]
             righthalf = alist[mid:]
@@ -141,7 +142,7 @@ class Example(QWidget):
                 alist[k]=righthalf[j]
                 j=j+1
                 k=k+1
-                
+            self.output.append("<font color=green>Merging: </>"+ str(alist))              
 
     # Enter array
     def getnum(self):
@@ -150,6 +151,7 @@ class Example(QWidget):
         if ok:
             self.arr.append(num)
             self.output.setText(str(self.arr))
+
     # Enter number in array
     def randArray(self, length):
         i = 0
@@ -166,15 +168,17 @@ class Example(QWidget):
                 self.output.append("\n<b>Result: </b>" + str(self.arr))
             else:
                 self.output.append("<b>Your array: </b>" + str(self.arr))
-
+    
+    # Displaying sorting results
     def sortArray(self):
         self.mergeSort(self.arr)
         self.output.append("\n<b>Result: </b>" + str(self.arr))
 
+    # Screen cleaning function    
     def clearWindow(self):
         self.output.clear() 
         self.arr = []
-   
+    
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)    
