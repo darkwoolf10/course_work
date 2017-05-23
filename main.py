@@ -1,11 +1,20 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
-import sys, random
+from __future__ import unicode_literals
+import sys
+import os
+import random
+from PyQt5 import QtCore, QtWidgets
 from PyQt5 import QtGui
-from PyQt5.QtWidgets import (QApplication, QWidget, QDesktopWidget, 
-    QGridLayout, QVBoxLayout, QPushButton, QInputDialog, QLabel, QHBoxLayout,
-    QToolTip, QMessageBox, QLineEdit, QTextEdit,QFrame, QLCDNumber, QSlider)
+from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QIcon, QFont, QColor
+import matplotlib
+import matplotlib.pyplot as plt
+import numpy as np
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+from numpy import arange, sin, pi
+from matplotlib.figure import Figure
+
 
 class Example(QWidget):
 
@@ -18,6 +27,7 @@ class Example(QWidget):
         layout = QHBoxLayout(self)
         button = QHBoxLayout(self)
         self.arr = []
+        
     
         self.resize(800, 440)
         self.center()
@@ -32,10 +42,10 @@ class Example(QWidget):
         self.randButton.setStyleSheet("""
             color: #fff;
             text-decoration: none;
-            background: rgb(212,75,56);
+            background: #3498db;
             } 
-            QPushButton:hover { background: rgb(232,95,76); }
-            QPushButton:active { background: rgb(152,15,0); }
+            QPushButton:hover { background: #2980b9; }
+            QPushButton:active { background: #3498db; }
             """)
 
         self.sort = QPushButton('Sort array', self)
@@ -45,10 +55,10 @@ class Example(QWidget):
         self.sort.setStyleSheet("""
             color: #fff;
             text-decoration: none;
-            background: rgb(212,75,56);
+            background: #3498db;
             } 
-            QPushButton:hover { background: rgb(232,95,76); }
-            QPushButton:active { background: rgb(152,15,0); }
+            QPushButton:hover { background: #2980b9; }
+            QPushButton:active { background: #3498db; }
             """)
 
         self.clear = QPushButton('Clear', self)
@@ -58,10 +68,10 @@ class Example(QWidget):
         self.clear.setStyleSheet("""
             color: #fff;
             text-decoration: none;
-            background: rgb(212,75,56);
+            background: #3498db;
             } 
-            QPushButton:hover { background: rgb(232,95,76); }
-            QPushButton:active { background: rgb(152,15,0); }
+            QPushButton:hover { background: #2980b9; }
+            QPushButton:active { background: #3498db; }
             """)
 
         self.btn = QPushButton('Enter array', self)
@@ -70,13 +80,27 @@ class Example(QWidget):
         self.btn.setStyleSheet("""
             color: #fff;
             text-decoration: none;
-            background: rgb(212,75,56);
+            background: #3498db;
             padding: .7em 1.5em;
             } 
-            QPushButton:hover { background: rgb(232,95,76); }
-            QPushButton:active { background: rgb(152,15,0); }
+            QPushButton:hover { background: #2980b9; }
+            QPushButton:active { background: #3498db; }
             """)
         self.randButton.move(11, 140)
+
+        self.btn = QPushButton('Diagram', self)
+        self.btn.clicked.connect(self.showDiagram)
+        layout.addWidget(self.btn)
+        self.btn.setStyleSheet("""
+            color: #fff;
+            text-decoration: none;
+            background: #3498db;
+            padding: .7em 1.5em;
+            } 
+            QPushButton:hover { background: #2980b9; }
+            QPushButton:active { background: #3498db; }
+            """)
+        self.btn.move(11, 240)
 
         # Array input field
         self.lbl = QLabel('<b>Enter array:</b>', self)
@@ -89,7 +113,10 @@ class Example(QWidget):
         self.output.setStyleSheet("color:blue")
         self.mergeSort( self.arr )
 
+        
+
         self.show()
+
 
     #  Asked whether you really sure you want to close
     def closeEvent(self, event):
@@ -113,7 +140,7 @@ class Example(QWidget):
     # function marge sort
     def mergeSort(self, alist):        
         if len(alist)>1:
-            self.output.append("<font color=red>Splitting: </font>" + str(alist))
+            self.output.append("<font color=red>Splitting: " + str(alist))
             mid = len(alist)//2
             lefthalf = alist[:mid]
             righthalf = alist[mid:]
@@ -178,7 +205,14 @@ class Example(QWidget):
     def clearWindow(self):
         self.output.clear() 
         self.arr = []
-    
+    # Окно диаграмы
+    def showDiagram(self):
+        w = QWidget()
+        w.resize(400, 400)
+        w.move(300, 300)
+        w.setWindowTitle('Simple')
+        w.show()
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)    
