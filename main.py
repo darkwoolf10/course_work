@@ -11,10 +11,43 @@ from PyQt5.QtGui import QIcon, QFont, QColor
 import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
+import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from numpy import arange, sin, pi
+from pylab import figure, axes, pie, title, show
 from matplotlib.figure import Figure
 
+class diff_window(QWidget):
+    def __init__(self):
+        super().__init__()
+
+        self.initDiagram()
+
+    def initDiagram(self):  
+
+        fig = plt.figure()
+        ax = fig.add_subplot(111)   # добавление области рисования ax
+
+        N = len(ex.arr)
+        x = ex.arr
+        y = 100.*np.random.rand(N)
+
+        rgb = np.array([204,255,51])/255.
+        myhex = '#660099'
+
+        ax.plot(x, y, color=myhex)
+        ax.bar(x, y, color=rgb, alpha=0.75, align='center')
+
+        ax.set_xticks(x)   # установка делений на оси OX
+        ax.set_xlim(np.min(x)-1, np.max(x)+1)   # ограничение области изменения по оси OX
+        ax.grid(True)
+
+        plt.show()
+
+        # self.DiagramField = QText("Enter", self)
+        # DiagramBox.addWidget(self.DiagramField) 
+
+        
 
 class Example(QWidget):
 
@@ -24,6 +57,7 @@ class Example(QWidget):
         self.initUI()
 
     def initUI(self):
+
         layout = QHBoxLayout(self)
         button = QHBoxLayout(self)
         self.arr = []
@@ -205,13 +239,14 @@ class Example(QWidget):
     def clearWindow(self):
         self.output.clear() 
         self.arr = []
-    # Окно диаграмы
+
+    # Diagram window
     def showDiagram(self):
-        w = QWidget()
-        w.resize(400, 400)
-        w.move(300, 300)
-        w.setWindowTitle('Simple')
-        w.show()
+        self.diff_window = diff_window()
+        #self.diff_window.resize(600, 400)
+        #self.diff_window.move(300, 300)
+        #self.diff_window.setWindowTitle('Diagram')
+        #self.diff_window.show()
 
 
 if __name__ == '__main__':
