@@ -8,8 +8,8 @@ from matplotlib.figure import Figure
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import (
-    QApplication, QWidget, QSizePolicy, QRadioButton, QPushButton, QVBoxLayout, QTextEdit, QLabel, QMessageBox
-)
+    QApplication, QWidget, QSizePolicy, QRadioButton, QPushButton, QVBoxLayout, QTextEdit, QLabel, QMessageBox,
+    QDesktopWidget)
 
 
 class PlotCanvas(FigureCanvasQTAgg):
@@ -24,12 +24,33 @@ class PlotCanvas(FigureCanvasQTAgg):
         FigureCanvasQTAgg.updateGeometry(self)
         self.timer = QtCore.QTimer(self)
 
-    def sort_shit(self, arr):
-        for i in range(len(arr)):
-            for j in range(len(arr) - 1 - i):
-                if arr[j] > arr[j + 1]:
-                    arr[j], arr[j + 1] = arr[j + 1], arr[j]
-                    yield arr
+    def sort_shit(self, arr):       
+        def MergerGroup(arr, left, m, right):
+            if left >= right: return None
+            if m < left or right < m: return None
+            t = left
+            for j in range(m+1, right+1):#подгруппа 2
+                for i in range(t, j):#цикл подгруппы 1
+                    if arr[j] < arr[i]:
+                        r = arr[j]
+                        #итерационно переставляем элементы, чтобы упорядочить
+                        for k in range(j, i, -1):
+                            arr[k] = arr[k - 1]
+                        arr[i] = r
+                        t = i#проджолжение вставки в группе 1
+                        break#к следующему узлу из подгруппы 2
+                    
+        if len(arr) < 2: return None
+        k=1
+        while k<len(arr):
+            g=0
+            while g<len(arr):#группы
+                z = g + k + k - 1#последний эл-т группы
+                r = z if z < len(arr) else len(arr) - 1#последняя группа
+                MergerGroup(arr, g, g + k - 1, r)#слияние
+                yield arr
+                g+=2*k
+            k*=2
 
     def get_arr(self, arr=None, time=1500, minimum=-50, maximum=50, amount=20):
         if arr:
@@ -77,7 +98,7 @@ class Example(QWidget):
         super().__init__()
 
         self.setGeometry(100, 100, 900, 400)
-        self.setWindowTitle("Shit")
+        self.setWindowTitle("merge sort")
 
         self.current_state = "user"
 
@@ -120,7 +141,7 @@ class Example(QWidget):
         self.random_warning.resize(280, 40)
         self.random_warning.hide()
 
-        self.min_field_warning = QLabel("Минимальное значение:", self)
+        self.min_field_warning = QLabel("Min value:", self)
         self.min_field_warning.move(20, 130)
         self.min_field_warning.resize(
             120, self.min_field_warning.frameGeometry().height()
@@ -165,11 +186,11 @@ class Example(QWidget):
         vbox.addWidget(self.random_array)
 
         self.setLayout(vbox)
-
+        self.center()
         self.show()
 
     def radio_button_state(self, button):
-        if button.text() == "Ввести массив":
+        if button.text() == "Enter array":
             if button.isChecked():
                 if not self.current_state == "user":
                     self.current_state = "user"
@@ -239,6 +260,13 @@ class Example(QWidget):
                                         amount=int(self.num_field.toPlainText()),
                                         time=int(float(self.timer_field.toPlainText()) * 1000))
             print(sender.text(), "random")
+
+    def center(self):
+        qr = self.frameGeometry()
+        cp = QDesktopWidget().availableGeometry().center()
+        qr.moveCenter( cp )
+        self.move(qr.topLeft())
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
