@@ -7,6 +7,7 @@ from random import randint
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
 from PyQt5 import QtCore
+from PyQt5.QtGui import QIcon, QFont, QColor
 from PyQt5.QtWidgets import (
     QApplication, QWidget, QSizePolicy, QRadioButton, QPushButton, QVBoxLayout, QTextEdit, QLabel, QMessageBox,
     QDesktopWidget)
@@ -90,6 +91,7 @@ class PlotCanvas(FigureCanvasQTAgg):
             self.axes.cla()
             self.axes.plot(arr_inst, "-ro")
             self.draw()
+           
 
 
 class Example(QWidget):
@@ -99,6 +101,7 @@ class Example(QWidget):
 
         self.setGeometry(100, 100, 900, 400)
         self.setWindowTitle("merge sort")
+        self.setWindowIcon(QIcon('web.png'))  
 
         self.current_state = "user"
 
@@ -111,12 +114,29 @@ class Example(QWidget):
             self.start_sort_button.frameGeometry().width() + 10, self.start_sort_button.frameGeometry().height()
         )
         self.start_sort_button.clicked.connect(self.start_button)
+        self.start_sort_button.setStyleSheet("""
+            color: #fff;
+            text-decoration: none;
+            background: #3498db;;
+            } 
+            QPushButton:hover { background: #2980b9; }
+            QPushButton:active { background: #3498db; }
+            """)
+
         self.stop_sort_button = QPushButton("Stop sorting", self)
         self.stop_sort_button.move(190, 360)
         self.stop_sort_button.resize(
             self.stop_sort_button.frameGeometry().width() + 40, self.stop_sort_button.frameGeometry().height()
         )
         self.stop_sort_button.clicked.connect(self.pc.stop_sort)
+        self.stop_sort_button.setStyleSheet("""
+            color: #fff;
+            text-decoration: none;
+            background: #3498db;
+            } 
+            QPushButton:hover { background: #2980b9; }
+            QPushButton:active { background: #3498db; }
+            """)
 
         self.timer_warning = QLabel("Default - 1.5 s:", self)
         self.timer_warning.move(20, 320)
@@ -149,7 +169,7 @@ class Example(QWidget):
         self.min_field_warning.hide()
         self.min_field = QTextEdit(self)
         self.min_field.move(150, 135)
-        self.min_field.resize(50, 20)
+        self.min_field.resize(80, 20)
         self.min_field.hide()
 
         self.max_field_warning = QLabel("Max value:", self)
@@ -160,7 +180,7 @@ class Example(QWidget):
         self.max_field_warning.hide()
         self.max_field = QTextEdit(self)
         self.max_field.move(160, 165)
-        self.max_field.resize(50, 20)
+        self.max_field.resize(80, 20)
         self.max_field.hide()
 
         self.num_field_warning = QLabel("Amount of elements:", self)
@@ -171,7 +191,7 @@ class Example(QWidget):
         self.num_field_warning.hide()
         self.num_field = QTextEdit(self)
         self.num_field.move(160, 195)
-        self.num_field.resize(50, 20)
+        self.num_field.resize(80, 20)
         self.num_field.hide()
 
         vbox = QVBoxLayout()
@@ -267,7 +287,16 @@ class Example(QWidget):
         qr.moveCenter( cp )
         self.move(qr.topLeft())
 
+    def closeEvent(self, event):
+         
+        reply = QMessageBox.question(self, 'Message',
+            "Are you sure to quit?", QMessageBox.Yes |
+            QMessageBox.No, QMessageBox.No)
 
+        if reply == QMessageBox.Yes:
+            event.accept()
+        else:
+            event.ignore()   
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     ex = Example()
